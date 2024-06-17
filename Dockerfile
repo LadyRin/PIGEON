@@ -9,7 +9,7 @@ WORKDIR /app
 # Install app dependencies
 COPY requirements.txt .
 RUN apt-get update && \
-    apt-get install -y libsasl2-dev python-dev-is-python3 libldap2-dev libssl-dev && \
+    apt-get install -y libsasl2-dev python-dev-is-python3 libldap2-dev libssl-dev ldap-utils && \
     apt-get clean && \
     pip install -r requirements.txt
 

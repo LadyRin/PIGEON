@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import os
+import ldap
+from django_auth_ldap.config import LDAPSearch
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +34,13 @@ ALLOWED_HOSTS = []
 MEDIA_ROOT = os.path.expanduser('~/Documents')
 MEDIA_URL = '/media/'
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {"django_auth_ldap": {"level": "DEBUG", "handlers": ["console"]}},
+}
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,6 +52,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "pigeonwebapp",
     "rest_framework",
+    "rest_framework_simplejwt",
 ]
 
 MIDDLEWARE = [
@@ -89,6 +100,46 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+AUTH_LDAP_SERVER_URI = 'ldap://host.docker.internal:10389'
+AUTH_LDAP_BIND_DN = 'cn=admin,dc=planetexpress,dc=com'
+AUTH_LDAP_BIND_PASSWORD = 'GoodNewsEveryone'
+AUTH_LDAP_USER_SEARCH = LDAPSearch(
+    'ou=people,dc=planetexpress,dc=com',
+    ldap.SCOPE_SUBTREE,
+    '(uid=%(user)s)',
+)
+
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email":"mail"
+}
+
+REST_FRAMEWORK = {
+    'NON_FIELD_ERRORS_KEY': 'errors',
+    'URL_FORMAT_OVERRIDE': 'None',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ]
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
