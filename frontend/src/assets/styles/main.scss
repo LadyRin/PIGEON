@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Merriweather', serif;
+
+  --theme-dark-background: #1e1e1e;
+  --theme-dark-text: #eee;
+  --theme-dark-border: #333;
+  --theme-dark-panel: #1a1a1a;
+  --theme-dark-panel-secondary: #2a2a2a;
+  --theme-dark-panel-tertiary: #333;
+  --theme-dark-success: #31573a;
+  --theme-dark-error: #7f2d2d;
+  --theme-dark-warning: #7f6a2d;
+  --theme-dark-info: #2d5f7f;
+
+  --theme-light-background: #fff;
+  --theme-light-text: black;
+  --theme-light-border: #ddd;
+  --theme-light-panel: #f8f9fa;
+  --theme-light-panel-secondary: #e9ecef;
+  --theme-light-panel-tertiary: #ddd;
+  --theme-light-success: #f1f8e9;
+  --theme-light-error: #fbe9e7;
+  --theme-light-warning: #fffde7;
+  --theme-light-info: #e3f2fd;
+
+  --main-color: #007c00;
+
+  &.dark {
+    --theme-background: var(--theme-dark-background);
+    --theme-text: var(--theme-dark-text);
+    --theme-border-color: var(--theme-dark-border);
+    --theme-panel: var(--theme-dark-panel);
+    --theme-panel-secondary: var(--theme-dark-panel-secondary);
+    --theme-panel-tertiary: var(--theme-dark-panel-tertiary);
+    --theme-success: var(--theme-dark-success);
+    --theme-error: var(--theme-dark-error);
+    --theme-warning: var(--theme-dark-warning);
+    --theme-info: var(--theme-dark-info);
+  }
+
+  &.light {
+    --theme-background: var(--theme-light-background);
+    --theme-text: var(--theme-light-text);
+    --theme-border-color: var(--theme-light-border);
+    --theme-panel: var(--theme-light-panel);
+    --theme-panel-secondary: var(--theme-light-panel-secondary);
+    --theme-panel-tertiary: var(--theme-light-panel-tertiary);
+    --theme-success: var(--theme-light-success);
+    --theme-error: var(--theme-light-error);
+    --theme-warning: var(--theme-light-warning);
+    --theme-info: var(--theme-light-info);
+  }
+}
+
+body {
+  background-color: var(--theme-background);
+  height: 100vh;
+  color: var(--theme-text);
+  transition: background-color 0.2s;
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
