@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from pigeonwebapp.views import EventViewSet, EventTypeViewSet, EventThemeViewSet, MailingListViewSet, CustomObtainPairView
+from pigeonwebapp.views import EventViewSet, EventTypeViewSet, EventThemeViewSet, MailingListViewSet, CustomObtainPairView, UserViewSet, EmailViewSet
 from django.urls import path, re_path
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from drf_yasg import openapi
@@ -17,11 +17,13 @@ schema_view = get_schema_view(
     public=True,
 )
 
-router = DefaultRouter()
-router.register(r'events', EventViewSet)
-router.register(r'event_types', EventTypeViewSet)
-router.register(r'event_themes', EventThemeViewSet)
-router.register(r'mailing_lists', MailingListViewSet)
+router = DefaultRouter(trailing_slash=False)
+router.register(r'events', EventViewSet, basename='events')
+router.register(r'event_types', EventTypeViewSet, basename='event_types')
+router.register(r'event_themes', EventThemeViewSet, basename='event_themes')
+router.register(r'mailing_lists', MailingListViewSet, basename='mailing_lists')
+router.register(r'users', UserViewSet, basename='users')
+router.register(r'emails', EmailViewSet, basename='emails')
 
 urlpatterns = router.urls
 urlpatterns += [

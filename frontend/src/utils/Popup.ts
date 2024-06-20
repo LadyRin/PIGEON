@@ -2,6 +2,7 @@ export class PopupUtil {
   private openConfirm: ((message: string) => Promise<boolean>) | null = null
   private openPrompt: ((message: string) => Promise<string | null>) | null = null
   private openAlert: ((message: string) => Promise<void>) | null = null
+  private openResourceEdit: ((resource: any) => Promise<any>) | null = null
 
   async confirm(message: string): Promise<boolean> {
     if (!this.openConfirm) {
@@ -49,6 +50,22 @@ export class PopupUtil {
     }
 
     this.openAlert = open
+  }
+
+  async resourceEdit(resource: any): Promise<any> {
+    if (!this.openResourceEdit) {
+      throw new Error('resource edit popup not registered')
+    }
+
+    return this.openResourceEdit(resource)
+  }
+
+  registerResourceEditPopup(open: (resource: any) => Promise<any>) {
+    if (this.openResourceEdit) {
+      throw new Error('resource edit popup already registered')
+    }
+
+    this.openResourceEdit = open
   }
 }
 

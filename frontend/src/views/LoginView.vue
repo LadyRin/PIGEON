@@ -15,7 +15,7 @@ const login = () => {
   authStore
     .login(username.value, password.value)
     .then(() => {
-      console.log('Login successful')
+      console.log('Login successful 2')
       router.push('/')
     })
     .catch(handleError)
@@ -24,7 +24,7 @@ const login = () => {
 
 <template>
   <div class="container">
-    <form>
+    <form @keypress.enter="login">
       <h2>Login</h2>
       <p><em>Login using your LDAP account.</em></p>
 

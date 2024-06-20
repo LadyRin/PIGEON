@@ -2,7 +2,7 @@
  * Représente une ressource de l'API, avec des méthodes pour la sérialisation et la désérialisation, ainsi qu'une route d'API
  */
 export abstract class APIResource {
-  abstract apiRoute: string
+  abstract get apiRoute(): string
 
   abstract getIdentifier(): any
   abstract fromJson(json: any): this

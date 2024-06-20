@@ -2,16 +2,13 @@
 import ConfirmPopup from '@/components/popup/ConfirmPopup.vue'
 import PromptPopup from '@/components/popup/PromptPopup.vue'
 import AlertPopup from '@/components/popup/AlertPopup.vue'
+import ResourceEditPopup from '@/components/popup/ResourceEditPopup.vue'
 import TokenExpiredPopup from '@/components/popup/TokenExpiredPopup.vue'
 import FlashContainer from '@/components/flashMessages/FlashContainer.vue'
 import NavbarComponent from '@/components/NavbarComponent.vue'
 import { onMounted, ref, watch } from 'vue'
-import { useAuthStore } from '@/core/stores/auth'
-import { useRouter } from 'vue-router'
 
 const theme = ref(localStorage.getItem('theme') || 'dark')
-const router = useRouter()
-const authStore = useAuthStore()
 
 onMounted(() => {
   document.body.className = theme.value
@@ -21,15 +18,11 @@ watch(theme, (value) => {
   localStorage.setItem('theme', value)
   document.body.className = value
 })
-
-const logout = () => {
-  authStore.logout()
-  router.push('/login')
-}
 </script>
 
 <template>
   <TokenExpiredPopup />
+  <ResourceEditPopup />
   <ConfirmPopup />
   <PromptPopup />
   <AlertPopup />
@@ -60,15 +53,17 @@ const logout = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 100px;
-  height: 100%;
+  padding: 100px 0;
+  min-height: calc(100vh - 100px);
+  height: fit-content;
   width: 100%;
   position: relative;
+  overflow: auto;
 }
 
 .theme-selector {
-  position: absolute;
-  top: 10px;
+  position: fixed;
+  top: 110px;
   right: 10px;
 
   button {

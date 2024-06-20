@@ -184,3 +184,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Celery settings
+CELERY_BROKER_URL = 'amqp://celery:celery@rabbitmq:5672/celery'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
