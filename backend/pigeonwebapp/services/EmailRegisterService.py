@@ -2,6 +2,8 @@ from datetime import datetime, timedelta, timezone
 from pigeonwebapp.models.queued_email import QueuedEmail
 from pigeonwebapp.models.event import Event 
 from django.template.loader import render_to_string
+from pigeonproject import settings
+import pytz 
 
 
 def register_emails_for_event(event: Event):
@@ -13,10 +15,11 @@ def register_emails_for_event(event: Event):
 
 def create_email_for_event(event: Event, time_before_event: timedelta):
     # Create email for event
-    now = datetime.now(timezone(timedelta(hours=2)))
+    tz = pytz.timezone(settings.TIME_ZONE)
+    now = datetime.now(tz)
     event_date_time = datetime.combine(event.date, event.start_time)
+    event_date_time = tz.localize(event_date_time)
     email_send_time = event_date_time - time_before_event
-    email_send_time = timezone.make_aware(email_send_time)
     if email_send_time < now:
         return
 

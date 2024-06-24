@@ -24,7 +24,7 @@ export class APIResourceService<T extends APIResource> extends APIService {
       .get(this.apiRoute, token)
       .then((result) => (result.data as any[]).map((item) => new this.type().fromJson(item)))
       .catch((err) => {
-        throw buildException(err)
+        throw err
       })
   }
 

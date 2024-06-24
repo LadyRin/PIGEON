@@ -2,18 +2,14 @@ from datetime import datetime, timezone, timedelta
 from celery import shared_task
 from django.core import mail
 from pigeonwebapp.models.queued_email import QueuedEmail
+import pytz
+from pigeonproject import settings
 
 @shared_task
 def check_queued_emails():
     queued_emails = QueuedEmail.objects.all()
     for email in queued_emails:
-        now = datetime.now(timezone(timedelta(hours=2)))
-        delta = email.send_at - now
-        human_readable = timedelta.total_seconds(delta)
-        print(f"Checking email {email.id}")
-        print(f"Send at: {email.send_at}")
-        print(f"Now: {now}")
-        print(f"Time delta: {human_readable}")
+        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
         if email.send_at < now:
             send_queued_email(email)
             email.delete()
