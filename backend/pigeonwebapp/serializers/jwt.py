@@ -1,10 +1,8 @@
 from datetime import date
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from pigeonwebapp.tasks import add
 
 class CustomObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        add.delay(2, 3)
         data = super().validate(attrs)
         refresh = self.get_token(self.user)
         data['refresh'] = str(refresh)

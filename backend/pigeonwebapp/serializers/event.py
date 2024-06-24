@@ -3,7 +3,7 @@ from pigeonwebapp.serializers.event_type import EventTypeSerializer
 from pigeonwebapp.serializers.event_theme import EventThemeSerializer
 from pigeonwebapp.serializers.mailing_list import MailingListSerializer
 from pigeonwebapp.serializers.user import UserSerializer
-from pigeonwebapp.tasks import add
+from pigeonwebapp.services.EmailRegisterService import register_emails_for_event
 
 from pigeonwebapp.models import Event
 
@@ -23,6 +23,10 @@ class EventWriteSerializer(serializers.ModelSerializer):
         fields = ('title', 'event_type', 'theme', 'mailing_list', 'speaker_first_name', 'speaker_last_name', 'speaker_from', 'speaker_comment', 'date', 'start_time', 'end_time', 'description', 'attachment')
 
     def create(self, validated_data):
-        
         validated_data['owner'] = self.context['user']
-        return super().create(validated_data)
+        event = super().create(validated_data)
+
+        # Register emails for event
+        register_emails_for_event(event)
+        return event
+

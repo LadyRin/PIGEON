@@ -1,0 +1,3 @@
+Ceci est un rappel pour l'événement "{{ title }}" qui aura lieu le {{ date }} de {{ start_time }} à {{ end_time }}.
+{% if location %}Lieu: {{ location }}{% endif %}
+{% if description %}Description: {{ description }}{% endif %}
