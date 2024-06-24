@@ -4,6 +4,7 @@ from django.core import mail
 from pigeonwebapp.models.queued_email import QueuedEmail
 import pytz
 from pigeonproject import settings
+from django.template.loader import render_to_string
 
 @shared_task
 def check_queued_emails():
@@ -17,11 +18,25 @@ def check_queued_emails():
 
 @shared_task
 def send_queued_email(email: QueuedEmail):
+
+    subject = f"Event reminder: {email.event.title}"
+
+    context = {
+        'title': email.event.title,
+        'description': email.event.description,
+        'date': email.event.date,
+        'start_time': email.event.start_time,
+        'end_time': email.event.end_time,
+    }
+
+    message = render_to_string('reminder_email.txt', context)
+    address = email.event.mailing_list.email
+
     with mail.get_connection() as connection:
         mail.EmailMessage(
-            email.subject,
-            email.message,
+            subject,
+            message,
             'pigeon-events@lupm.in2p3.fr',
-            [email.mail_to.address],
+            [address],
             connection=connection
         ).send()

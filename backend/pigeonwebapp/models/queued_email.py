@@ -1,11 +1,9 @@
 from typing import Any
 from django.db import models
-from pigeonwebapp.models import MailingList
+from pigeonwebapp.models import Event
 
 class QueuedEmail(models.Model):
-    mail_to = models.ForeignKey(MailingList, on_delete=models.CASCADE)
-    subject = models.CharField(max_length=100)
-    message = models.TextField()
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
     send_at = models.DateTimeField()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

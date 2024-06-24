@@ -7,6 +7,9 @@ import pytz
 
 
 def register_emails_for_event(event: Event):
+    # Remove all emails for event
+    QueuedEmail.objects.filter(event=event).delete()
+
     # Create emails for event
     create_email_for_event(event, timedelta(minutes=5))
     create_email_for_event(event, timedelta(minutes=4))
@@ -23,15 +26,5 @@ def create_email_for_event(event: Event, time_before_event: timedelta):
     if email_send_time < now:
         return
 
-    context = {
-        'title': event.title,
-        'description': event.description,
-        'date': event.date,
-        'start_time': event.start_time,
-        'end_time': event.end_time,
-    }
-
-    message = render_to_string('reminder_email.txt', context)
-
-    email = QueuedEmail(mail_to=event.mailing_list, subject='Rappel ' + event.title, message=message, send_at=email_send_time)
+    email = QueuedEmail(event=event, send_at=email_send_time)
     email.save()
