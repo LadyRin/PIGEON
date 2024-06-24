@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { popupUtil } from '@/utils/Popup'
 import TextAreaInput from '@/components/input/TextAreaInput.vue'
+import TextInput from '@/components/input/TextInput.vue'
 
 const resource = ref<any>({})
 const isOpen = ref(false)
@@ -49,7 +50,7 @@ const cancel = () => {
         <div class="popup-prompt">
           <div class="form-group">
             <template v-for="field in fields" :key="field">
-              <TextAreaInput v-model="resource[field]" :id="field" :placeholder="field" />
+              <TextInput v-model="resource[field]" :id="field" :placeholder="field" />
             </template>
           </div>
         </div>
@@ -65,4 +66,16 @@ const cancel = () => {
 <style scoped lang="scss">
 @import '@/assets/styles/popup.scss';
 @import '@/assets/styles/form.scss';
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2rem;
+}
+
+button {
+  flex: 1;
+  cursor: pointer;
+}
 </style>

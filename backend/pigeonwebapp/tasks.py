@@ -30,7 +30,7 @@ def send_queued_email(email: QueuedEmail):
     }
 
     message = render_to_string('reminder_email.txt', context)
-    address = email.event.mailing_list.email
+    address = email.event.mailing_list.address
 
     with mail.get_connection() as connection:
         mail.EmailMessage(
