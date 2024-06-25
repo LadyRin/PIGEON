@@ -81,7 +81,6 @@ defineEmits(['delete'])
 
 <style scoped lang="scss">
 .event {
-  min-height: 150px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -93,8 +92,56 @@ defineEmits(['delete'])
   width: 100%;
   gap: 0.5rem;
 
+  .actions {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+
+    button,
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background-color: transparent;
+      color: var(--theme-text);
+      border: none;
+      border-radius: 50%;
+      padding: 0.5rem;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--theme-panel-secondary);
+      }
+
+      &:visited {
+        color: var(--theme-text);
+      }
+    }
+  }
+
   &.past {
     background-color: var(--theme-panel-secondary);
+
+    button {
+      background-color: var(--theme-panel-tertiary);
+
+      &:hover {
+        background-color: var(--theme-panel);
+      }
+    }
+
+    .actions button,
+    .actions a {
+      background-color: transparent;
+
+      &:hover {
+        background-color: var(--theme-panel);
+      }
+    }
   }
 
   button {
@@ -136,12 +183,12 @@ defineEmits(['delete'])
     text-align: center;
     text-wrap: wrap;
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   h2 {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1rem;
 
     .speaker {
       font-weight: bold;
@@ -161,39 +208,12 @@ defineEmits(['delete'])
   }
 
   .description {
+    font-size: 0.9rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
     overflow: hidden;
-  }
-}
-
-.actions {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-
-  button,
-  a {
-    text-decoration: none;
-    background-color: transparent;
-    color: var(--theme-text);
-    border: none;
-    border-radius: 50%;
-    padding: 0.5rem;
-    cursor: pointer;
-
-    &:hover {
-      background-color: var(--theme-panel-secondary);
-    }
-
-    &:visited {
-      color: var(--theme-text);
-    }
   }
 }
 </style>

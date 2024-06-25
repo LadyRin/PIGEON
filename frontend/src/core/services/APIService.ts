@@ -31,26 +31,13 @@ export class APIResourceService<T extends APIResource> extends APIService {
   /**
    * GetAll (with pagination)
    */
-  getAllPaginated(
-    token: string,
-    per_page: number,
-    current_page: number,
-    sort_by: string,
-    sort_desc: boolean,
-    search: string,
-    exact_search: boolean = false
-  ): Promise<PaginationResponse> {
+  getAllPaginated(token: string, per_page: number, current_page: number, search: string): Promise<PaginationResponse> {
     const params: any = {
       per_page: per_page,
       current_page: current_page
     }
-    if (sort_by != '') {
-      params.order_by = sort_by
-      params.order_type = sort_desc ? 'DESC' : 'ASC'
-    }
     if (search != '') {
       params.search = search
-      params.exact_search = exact_search
     }
     return this.client
       .get(this.apiRoute, token, params)
@@ -67,7 +54,7 @@ export class APIResourceService<T extends APIResource> extends APIService {
         return out
       })
       .catch((err) => {
-        throw buildException(err)
+        throw err
       })
   }
 
