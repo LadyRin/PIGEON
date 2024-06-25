@@ -7,7 +7,7 @@ from pigeonwebapp.serializers.event import EventReadSerializer, EventWriteSerial
 
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventReadSerializer
-    queryset = Event.objects.all().order_by('-date', '-start_time').values()
+    queryset = Event.objects.all().order_by('-date', '-start_time')
     permission_classes = [IsAuthenticated]
 
     def create(self, request):
