@@ -90,11 +90,13 @@ const deleteEvent = async (event: Event) => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 60%;
+  width: clamp(400px, 100%, 1000px);
 }
 
 .header {
   display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
   justify-content: space-between;
   width: 100%;
 }

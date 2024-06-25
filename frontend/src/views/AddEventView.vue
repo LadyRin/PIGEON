@@ -83,21 +83,25 @@ const edit = async () => {
         <TextInput v-model="event.title" placeholder="Titre" />
         <TextAreaInput v-model="event.description" placeholder="Description" />
 
-        <div class="horizontal space-between">
-          <h4>Type:</h4>
-          <select v-model="event.event_type">
-            <option value="" disabled selected>Type d'évènement</option>
-            <option v-for="eventType in eventTypes" :key="eventType.id" :value="eventType">
-              {{ eventType.name }}
-            </option>
-          </select>
-          <h4>Thème:</h4>
-          <select v-model="event.theme">
-            <option value="" disabled selected>Thème de l'évènement</option>
-            <option v-for="eventTheme in eventThemes" :key="eventTheme.id" :value="eventTheme">
-              {{ eventTheme.name }}
-            </option>
-          </select>
+        <div class="horizontal">
+          <div class="horizontal">
+            <h4>Type:</h4>
+            <select v-model="event.event_type">
+              <option value="" disabled selected>Type d'évènement</option>
+              <option v-for="eventType in eventTypes" :key="eventType.id" :value="eventType">
+                {{ eventType.name }}
+              </option>
+            </select>
+          </div>
+          <div class="horizontal">
+            <h4>Thème:</h4>
+            <select v-model="event.theme">
+              <option value="" disabled selected>Thème de l'évènement</option>
+              <option v-for="eventTheme in eventThemes" :key="eventTheme.id" :value="eventTheme">
+                {{ eventTheme.name }}
+              </option>
+            </select>
+          </div>
         </div>
 
         <h4>Personnes concernées:</h4>
@@ -109,7 +113,7 @@ const edit = async () => {
         </select>
 
         <h4>Intervenant:</h4>
-        <div class="horizontal space-between">
+        <div class="horizontal">
           <TextInput v-model="event.speaker_first_name" placeholder="Prénom" />
           <TextInput v-model="event.speaker_last_name" placeholder="Nom" />
         </div>
@@ -121,10 +125,14 @@ const edit = async () => {
         <input v-model="event.date" type="date" />
 
         <div class="horizontal">
-          <h4>De</h4>
-          <input v-model="event.start_time" type="time" id="start-time" />
-          <h4>à</h4>
-          <input v-model="event.end_time" type="time" id="end-time" />
+          <div class="horizontal">
+            <h4>De</h4>
+            <input v-model="event.start_time" type="time" id="start-time" />
+          </div>
+          <div class="horizontal">
+            <h4>à</h4>
+            <input v-model="event.end_time" type="time" id="end-time" />
+          </div>
         </div>
       </div>
 
@@ -140,12 +148,9 @@ const edit = async () => {
 
 .horizontal {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
   align-items: center;
   gap: 16px;
-}
-
-.space-between {
-  display: flex;
-  justify-content: space-between;
 }
 </style>
