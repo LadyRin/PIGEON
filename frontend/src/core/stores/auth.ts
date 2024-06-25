@@ -45,6 +45,20 @@ export const useAuthStore = defineStore('auth', () => {
     flashMessage.success('You have been logged out')
   }
 
+  const refresh = () => {
+    return client
+      .post('/token/refresh', { refresh: refreshToken.value })
+      .then((result) => result.data as AuthResponse)
+      .then((data) => {
+        accessToken.value = data.access
+        refreshToken.value = data.refresh
+        return true
+      })
+      .catch(() => {
+        throw new Error('Token is not valid')
+      })
+  }
+
   watch(accessToken, (value) => {
     localStorage.setItem('accessToken', value)
   })
@@ -82,7 +96,8 @@ export const useAuthStore = defineStore('auth', () => {
     username,
     isAdmin,
     login,
-    logout
+    logout,
+    refresh
   }
 })
 
@@ -94,4 +109,9 @@ export interface AuthResponse {
   username: string
   date: string
   is_admin: boolean
+}
+
+export interface TokenResponse {
+  refresh: string
+  access: string
 }

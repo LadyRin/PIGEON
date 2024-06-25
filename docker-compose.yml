@@ -2,14 +2,14 @@ services:
   djangoapp:
     container_name: pigeonapp_django
     build:
-      context: .
+      context: ./backend
       dockerfile: django.Dockerfile
     ports:
       - "3000:8000"
     env_file:
       - .env
     volumes:
-      - .:/app
+      - ./backend:/app
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -19,12 +19,12 @@ services:
   celery_worker:
     container_name: pigeonapp_celery_worker
     build:
-      context: .
+      context: ./backend
       dockerfile: celery.Dockerfile
     env_file:
       - .env
     volumes:
-      - .:/app
+      - ./backend:/app
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -36,12 +36,12 @@ services:
   celery_beat:
     container_name: pigeonapp_celery_beat
     build:
-      context: .
+      context: ./backend
       dockerfile: celerybeat.Dockerfile
     env_file:
       - .env
     volumes:
-      - .:/app
+      - ./backend:/app
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -56,10 +56,12 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
-      timeout: 1s
-      retries: 50
+      timeout: 10s
+      retries: 5
     env_file:
       - .env
+    environment:
+      PGUSER: ${POSTGRES_USER}
     ports:
       - "8432:5432"
     volumes:
@@ -71,13 +73,18 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "rabbitmqctl node_health_check"]
       interval: 10s
-      timeout: 1s
-      retries: 50
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+      timeout: 10s
+      retries: 5
     env_file:
       - .env
+
+  web:
+    container_name: pigeonapp_web
+    build:
+      context: ./frontend
+      dockerfile: frontend.Dockerfile
+    ports:
+      - "3001:80"
 
 volumes:
   pgdata: {}

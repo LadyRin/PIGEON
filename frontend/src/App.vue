@@ -7,11 +7,25 @@ import TokenExpiredPopup from '@/components/popup/TokenExpiredPopup.vue'
 import FlashContainer from '@/components/flashMessages/FlashContainer.vue'
 import NavbarComponent from '@/components/NavbarComponent.vue'
 import { onMounted, ref, watch } from 'vue'
+import { tokenExpirationUtil } from '@/utils/TokenExpirationUtil'
+import { useAuthStore } from '@/core/stores/auth'
 
 const theme = ref(localStorage.getItem('theme') || 'dark')
+const store = useAuthStore()
+let interval: any
 
 onMounted(() => {
   document.body.className = theme.value
+
+  interval = setInterval(() => {
+    console.log('Refreshing')
+    if (store.isAuthenticated) {
+      store.refresh().catch(() => {
+        tokenExpirationUtil.warnTokenIsExpired()
+        clearInterval(interval)
+      })
+    }
+  }, 1000 * 60)
 })
 
 watch(theme, (value) => {

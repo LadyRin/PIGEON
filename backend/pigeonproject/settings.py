@@ -41,7 +41,17 @@ LOGGING = {
     "loggers": {"django_auth_ldap": {"level": "DEBUG", "handlers": ["console"]}},
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SMTP_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+CONSOLE_EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = SMTP_EMAIL_BACKEND if os.environ.get('EMAIL_BACKEND', 'Console') == 'SMTP' else CONSOLE_EMAIL_BACKEND
+
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL')
+
 
 APPEND_SLASH = False
 
@@ -96,12 +106,12 @@ WSGI_APPLICATION = "pigeonproject.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('DB_DRIVER','django.db.backends.postgresql'),
-        'USER': os.environ.get('PG_USER','postgres'),
-        'PASSWORD':os.environ.get('PG_PASSWORD','postgres'),
-        'NAME': os.environ.get('PG_DB','postgres'),
-        'PORT': os.environ.get('PG_PORT','5432'),
-        'HOST': os.environ.get('PG_HOST','localhost'), # uses the container if set, otherwise it runs locally
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': os.environ.get('POSTGRES_USER','postgres'),
+        'PASSWORD':os.environ.get('POSTGRES_PASSWORD','postgres'),
+        'NAME': os.environ.get('POSTGRES_DB','postgres'),
+        'PORT': os.environ.get('POSTGRES_PORT','5432'),
+        'HOST': os.environ.get('POSTGRES_HOST','localhost'),
     }
 }
 
@@ -110,11 +120,11 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-AUTH_LDAP_SERVER_URI = 'ldap://host.docker.internal:10389'
-AUTH_LDAP_BIND_DN = 'cn=admin,dc=planetexpress,dc=com'
-AUTH_LDAP_BIND_PASSWORD = 'GoodNewsEveryone'
+AUTH_LDAP_SERVER_URI = os.environ.get('LDAP_SERVER_URI')
+AUTH_LDAP_BIND_DN = os.environ.get('LDAP_BIND_DN')
+AUTH_LDAP_BIND_PASSWORD = os.environ.get('LDAP_BIND_PASSWORD')
 AUTH_LDAP_USER_SEARCH = LDAPSearch(
-    'ou=people,dc=planetexpress,dc=com',
+    os.environ.get('LDAP_USER_SEARCH_BASE'),
     ldap.SCOPE_SUBTREE,
     '(uid=%(user)s)',
 )
@@ -170,7 +180,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "fr-fr"
 
-TIME_ZONE = "Europe/Paris"
+TIME_ZONE = os.environ.get('TIME_ZONE', 'Europe/Paris')
 
 USE_I18N = True
 
@@ -190,4 +200,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Celery settings
 CELERY_BROKER_URL = 'amqp://celery:celery@rabbitmq:5672/celery'
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
-CELERY_TIMEZONE = 'Europe/Paris'
+CELERY_TIMEZONE = TIME_ZONE

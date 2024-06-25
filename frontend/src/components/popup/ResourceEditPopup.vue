@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { popupUtil } from '@/utils/Popup'
-import TextAreaInput from '@/components/input/TextAreaInput.vue'
 import TextInput from '@/components/input/TextInput.vue'
 
 const resource = ref<any>({})
