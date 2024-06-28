@@ -3,3 +3,5 @@ __pycache__/
 migrations/
 celerybeat-schedule
 private_key
+
+events.json

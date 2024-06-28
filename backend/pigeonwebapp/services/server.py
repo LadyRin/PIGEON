@@ -5,24 +5,16 @@ import paramiko.hostkeys
 import paramiko.util
 import os
 
-def ssh_connection(server: Server):
-    # SSH connection
-    transport = paramiko.Transport((server.hostname, server.port))    
-
-    private_key = paramiko.RSAKey.from_private_key_file('private_key')
-
-    transport.connect(username=server.username, pkey=private_key)
-
-    return transport
 
 def upload_file(server: Server, file: str):
-    with ssh_connection(server) as t:
-        sftp = paramiko.SFTPClient.from_transport(t)
+    private_key = paramiko.RSAKey.from_private_key_file('private_key')
+    
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client.connect(server.hostname, username=server.username, pkey=private_key, port=server.port, banner_timeout=200, timeout=200)
+    sftp = client.open_sftp()
 
-        remote_file = os.path.join('/', server.upload_directory, os.path.basename(file))
+    sftp.put(file, os.path.join('/', server.upload_directory, file))
 
-        print(f"Uploading {file} to {remote_file}")
-
-        if sftp:
-            sftp.put(file, remote_file)
-        t.close()
+    sftp.close()
+    client.close()

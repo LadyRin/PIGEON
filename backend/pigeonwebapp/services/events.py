@@ -7,7 +7,7 @@ def generate_json(file_name):
     events = Event.objects.all()
     serializer = EventFlatSerializer(events, many=True)
     with open(file_name, 'w') as f:
-        f.write(str(serializer.data))   
+        f.write(str(serializer.data).replace("'", '"'))
 
 def check_for_updates():
     # Generate JSON file and compare with the previous one
