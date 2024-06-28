@@ -30,3 +30,12 @@ class EventWriteSerializer(serializers.ModelSerializer):
         register_emails_for_event(event)
         return event
 
+
+class EventFlatSerializer(serializers.ModelSerializer):
+    event_type = serializers.SlugRelatedField(slug_field='name', read_only=True)
+    theme = serializers.SlugRelatedField(slug_field='name', read_only=True)
+
+    class Meta:
+        model = Event
+        fields = ('title', 'event_type', 'theme', 'speaker_first_name', 'speaker_last_name', 'speaker_from', 'speaker_comment', 'date', 'start_time', 'end_time', 'description', 'attachment')
+        read_only_fields = ('__all__',)

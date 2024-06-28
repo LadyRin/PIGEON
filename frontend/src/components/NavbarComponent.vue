@@ -25,7 +25,11 @@ const logout = () => {
 
         <router-link to="/events/new">Nouvel Évènement</router-link>
 
-        <router-link v-if="authStore.isAdmin" to="/admin">Admin</router-link>
+        <template v-if="authStore.isAdmin">
+          <router-link to="/admin/resources">Admin - Resources</router-link>
+          <router-link to="/admin/emails">Admin - Emails</router-link>
+          <router-link to="/admin/ssh">Admin - SSH</router-link>
+        </template>
       </div>
     </div>
 

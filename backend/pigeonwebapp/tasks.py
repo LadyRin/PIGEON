@@ -5,6 +5,10 @@ from pigeonwebapp.models.queued_email import QueuedEmail
 import pytz
 from pigeonproject import settings
 from django.template.loader import render_to_string
+from pigeonwebapp.models import Server
+from pigeonwebapp.services.server import upload_file
+from pigeonwebapp.services.events import check_for_updates, generate_json
+from pigeonwebapp.models import Event
 
 @shared_task
 def check_queued_emails():
@@ -40,3 +44,18 @@ def send_queued_email(email: QueuedEmail):
             [address],
             connection=connection
         ).send()
+
+@shared_task
+def update_servers_with_json(force=False):
+    file_path = 'events.json'
+
+    if force:
+        generate_json(file_path)
+    elif not check_for_updates():
+        print("No changes to events. Skipping update.")
+        return
+    
+    servers = Server.objects.all()
+    print(f"Updating {len(servers)} servers with JSON file.")
+    for server in servers:
+        upload_file(server, file_path)

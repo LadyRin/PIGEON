@@ -114,7 +114,7 @@ const _delete = async (resource: APIResource) => {
 
 <template>
   <div class="container">
-    <h1>Admin Panel</h1>
+    <h1>Admin - Resources</h1>
 
     <div class="admin-panel">
       <div class="admin-panel-item" v-for="(resource, key) in resources" :key="key">

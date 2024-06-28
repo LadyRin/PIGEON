@@ -70,10 +70,14 @@ const deleteEvent = async (event: Event) => {
         @fetch="fetchEvents"
         :optionValues="[5, 10, 20, 50]" />
     </div>
-    <div class="event-list">
+    <div class="event-list" v-if="events.length > 0">
       <EventComponent v-for="event in events" :key="event.id" :event="event" @delete="deleteEvent(event)" />
     </div>
+    <div v-else>
+      <p>Aucun événement trouvé</p>
+    </div>
     <PaginationMenu
+      v-if="pagination.pageCount > 1"
       v-model:page="pagination.page"
       v-model:items-per-page="pagination.itemsPerPage"
       :pagination="pagination"
