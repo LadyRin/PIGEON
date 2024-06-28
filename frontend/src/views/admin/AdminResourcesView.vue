@@ -1,64 +1,49 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { EventTheme } from '@/core/resources/EventTheme'
 import { EventType } from '@/core/resources/EventType'
 import { MailingList } from '@/core/resources/MailingList'
-import { eventThemeService } from '@/core/services'
-import { eventTypeService } from '@/core/services'
-import { mailingListService } from '@/core/services'
 import { useAuthStore } from '@/core/stores/auth'
 import { popupUtil } from '@/utils/Popup'
 import { APIResource } from '@/core/resources/APIResource'
 import { handleError } from '@/utils/ErrorHandler'
 import { APIResourceService } from '@/core/services/APIService'
+import { eventThemeService, mailingListService, eventTypeService } from '@/core/services'
 
 const store = useAuthStore()
 
-interface Resource {
-  constructor: any
-  service: APIResourceService<any>
-  list: Ref<any[]>
-  displayName: string
-}
-
-const resources: Record<string, Resource> = {
-  EventTheme: {
-    constructor: EventTheme,
-    service: eventThemeService,
-    list: ref<EventTheme[]>([]),
-    displayName: 'Thèmes'
-  },
-  EventType: {
-    constructor: EventType,
-    service: eventTypeService,
-    list: ref<EventType[]>([]),
-    displayName: 'Types'
-  },
-  MailingList: {
-    constructor: MailingList,
-    service: mailingListService,
-    list: ref<MailingList[]>([]),
-    displayName: 'Listes de diffusion'
-  }
-}
+const themes = ref<EventTheme[]>([])
+const types = ref<EventType[]>([])
+const mailingLists = ref<MailingList[]>([])
 
 const fetchResources = () => {
-  for (const key in resources) {
-    const { service, list } = resources[key]
-    service.getAll(store.accessToken).then((data: any) => {
-      list.value = data
+  eventThemeService
+    .getAll(store.accessToken)
+    .then((data) => {
+      themes.value = data
     })
-  }
+    .catch(handleError)
+
+  eventTypeService
+    .getAll(store.accessToken)
+    .then((data) => {
+      types.value = data
+    })
+    .catch(handleError)
+
+  mailingListService
+    .getAll(store.accessToken)
+    .then((data) => {
+      mailingLists.value = data
+    })
+    .catch(handleError)
 }
 
 onMounted(() => {
   fetchResources()
 })
 
-const create = async (resource: APIResource) => {
-  const service = resources[resource.constructor.name].service
-  const list = resources[resource.constructor.name].list
-
+const create = async (resource: APIResource, service: APIResourceService<any>, list: any[]) => {
   const res = await popupUtil.resourceEdit(resource)
   if (!res) {
     fetchResources()
@@ -68,15 +53,12 @@ const create = async (resource: APIResource) => {
   service
     .create(res, store.accessToken)
     .then((data: any) => {
-      list.value.push(data)
+      list.push(data)
     })
     .catch(handleError)
 }
 
-const edit = async (resource: APIResource) => {
-  const service = resources[resource.constructor.name].service
-  const list = resources[resource.constructor.name].list
-
+const edit = async (resource: APIResource, service: APIResourceService<any>, list: any[]) => {
   const res = await popupUtil.resourceEdit(resource)
   if (!res) {
     fetchResources()
@@ -86,17 +68,14 @@ const edit = async (resource: APIResource) => {
   service
     .update(res, store.accessToken)
     .then((data: any) => {
-      const index = list.value.findIndex((r: any) => r.id === data.id)
-      list.value[index] = data
+      const index = list.findIndex((r: any) => r.id === data.id)
+      list[index] = data
     })
     .catch(handleError)
 }
 
-const _delete = async (resource: APIResource) => {
-  const service = resources[resource.constructor.name].service
-  const list = resources[resource.constructor.name].list
-
-  const res = await popupUtil.confirm(`Are you sure you want to delete ${resource.constructor.name} ${resource.getIdentifier()}?`)
+const _delete = async (resource: APIResource, service: APIResourceService<any>, list: any[]) => {
+  const res = await popupUtil.confirm(`Are you sure you want to delete this resource?`)
   if (!res) {
     fetchResources()
     return
@@ -105,8 +84,8 @@ const _delete = async (resource: APIResource) => {
   service
     .delete(resource, store.accessToken)
     .then(() => {
-      const index = list.value.findIndex((r: any) => r.id === resource.getIdentifier())
-      list.value.splice(index, 1)
+      const index = list.findIndex((r: any) => r.id === resource.getIdentifier())
+      list.splice(index, 1)
     })
     .catch(handleError)
 }
@@ -117,19 +96,53 @@ const _delete = async (resource: APIResource) => {
     <h1>Admin - Resources</h1>
 
     <div class="admin-panel">
-      <div class="admin-panel-item" v-for="(resource, key) in resources" :key="key">
+      <div class="admin-panel-item">
         <h2>
-          {{ resource.displayName }}
-          <button class="material-symbols-outlined" @click="create(new resource.constructor())">add</button>
+          Event Themes
+          <button class="material-symbols-outlined" @click="create(new EventTheme(), eventThemeService, themes)">add</button>
         </h2>
         <ul>
-          <li v-for="r in resource.list.value" :key="r.id">
+          <li v-for="r in themes" :key="r.id">
             <span>
               {{ r.name }}
             </span>
             <span>
-              <button class="material-symbols-outlined" @click="edit(r)">edit</button>
-              <button class="material-symbols-outlined" @click="_delete(r)">delete</button>
+              <button class="material-symbols-outlined" @click="edit(r, eventThemeService, themes)">edit</button>
+              <button class="material-symbols-outlined" @click="_delete(r, eventThemeService, themes)">delete</button>
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="admin-panel-item">
+        <h2>
+          Event Types
+          <button class="material-symbols-outlined" @click="create(new EventType(), eventTypeService, types)">add</button>
+        </h2>
+        <ul>
+          <li v-for="r in types" :key="r.id">
+            <span>
+              {{ r.name }}
+            </span>
+            <span>
+              <button class="material-symbols-outlined" @click="edit(r, eventTypeService, types)">edit</button>
+              <button class="material-symbols-outlined" @click="_delete(r, eventTypeService, types)">delete</button>
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="admin-panel-item">
+        <h2>
+          Mailing Lists
+          <button class="material-symbols-outlined" @click="create(new MailingList(), mailingListService, mailingLists)">add</button>
+        </h2>
+        <ul>
+          <li v-for="r in mailingLists" :key="r.id">
+            <span>
+              {{ r.name }}
+            </span>
+            <span>
+              <button class="material-symbols-outlined" @click="edit(r, mailingListService, mailingLists)">edit</button>
+              <button class="material-symbols-outlined" @click="_delete(r, mailingListService, mailingLists)">delete</button>
             </span>
           </li>
         </ul>
