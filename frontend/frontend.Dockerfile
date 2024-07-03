@@ -8,6 +8,9 @@ RUN apt-get update && \
     apt-get install -y nodejs npm && \
     apt-get clean
 
+ARG API_PORT
+ENV API_PORT=${API_PORT}
+
 RUN npm install && \
     npm run build
 

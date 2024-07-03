@@ -5,7 +5,7 @@ services:
       context: ./backend
       dockerfile: django.Dockerfile
     ports:
-      - "3000:8000"
+      - "${EXPOSED_PORT_API}:8000"
     env_file:
       - .env
     volumes:
@@ -15,6 +15,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    restart: unless-stopped
 
   celery_worker:
     container_name: pigeonapp_celery_worker
@@ -32,6 +33,7 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+    restart: unless-stopped
 
   celery_beat:
     container_name: pigeonapp_celery_beat
@@ -49,6 +51,7 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+    restart: unless-stopped
 
   db:
     container_name: pigeonapp_db
@@ -63,9 +66,10 @@ services:
     environment:
       PGUSER: ${POSTGRES_USER}
     ports:
-      - "8432:5432"
+      - "${EXPOSED_PORT_DB}:5432"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
 
   rabbitmq:
     container_name: pigeonapp_rabbitmq
@@ -77,14 +81,18 @@ services:
       retries: 5
     env_file:
       - .env
+    restart: unless-stopped
 
   web:
     container_name: pigeonapp_web
     build:
       context: ./frontend
       dockerfile: frontend.Dockerfile
+      args:
+        - API_PORT=${EXPOSED_PORT_API}
     ports:
-      - "3001:80"
+      - "${EXPOSED_PORT_WEB}:80"
+    restart: unless-stopped
 
 volumes:
   pgdata: {}

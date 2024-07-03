@@ -27,7 +27,6 @@ const logout = () => {
 
         <template v-if="authStore.isAdmin">
           <router-link to="/admin/resources">Admin - Resources</router-link>
-          <router-link to="/admin/emails">Admin - Emails</router-link>
           <router-link to="/admin/ssh">Admin - SSH</router-link>
         </template>
       </div>

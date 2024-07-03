@@ -1,13 +1,23 @@
-from pigeonwebapp.models import Event
+from pigeonwebapp.models import Event, EventTheme, EventType
 from pigeonwebapp.serializers.event import EventFlatSerializer
+import json
 import os
 
 
 def generate_json(file_name):
     events = Event.objects.all()
     serializer = EventFlatSerializer(events, many=True)
+    theme_names = EventTheme.objects.values_list('name', flat=True)
+    type_names = EventType.objects.values_list('name', flat=True)
+
+    data = {
+        "events": serializer.data,
+        "themes":  list(theme_names),
+        "types": list(type_names)
+    }
+
     with open(file_name, 'w') as f:
-        f.write(str(serializer.data).replace("'", '"'))
+        f.write(json.dumps(data, indent=4))
 
 def check_for_updates():
     # Generate JSON file and compare with the previous one

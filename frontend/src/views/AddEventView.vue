@@ -71,6 +71,31 @@ const edit = async () => {
     })
     .catch(handleError)
 }
+
+/* const generateTestEvents = () => {
+  fetch('https://loripsum.net/api/10/short/plaintext')
+    .then((res) => res.text())
+    .then((text) => {
+      const descs = text.split('\n').filter((desc) => desc.length > 0)
+
+      descs.forEach((desc) => {
+        const event = new Event()
+        event.title = desc.split(' ')[0]
+        event.description = desc
+        event.date = new Date().toISOString().split('T')[0]
+        event.event_type = eventTypes.value[Math.floor(Math.random() * eventTypes.value.length)]
+        event.theme = eventThemes.value[Math.floor(Math.random() * eventThemes.value.length)]
+        event.mailing_list = mailingLists.value[Math.floor(Math.random() * mailingLists.value.length)]
+        event.speaker_first_name = 'Marcus Tullius'
+        event.speaker_last_name = 'Cicero'
+        event.speaker_from = 'Rome'
+        event.start_time = '09:00'
+        event.end_time = '10:00'
+
+        eventService.create(event, authStore.accessToken)
+      })
+    })
+} */
 </script>
 
 <template>
