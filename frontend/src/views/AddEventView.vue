@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { eventService } from '@/core/services'
-import { eventThemeService } from '@/core/services'
-import { eventTypeService } from '@/core/services'
-import { mailingListService } from '@/core/services'
+import { eventThemeService, bookingService, eventTypeService, mailingListService } from '@/core/services'
+import type { BookableResource } from '@/core/resources/BookableResource'
 import { Event } from '@/core/resources/Event'
 import { EventTheme } from '@/core/resources/EventTheme'
 import { EventType } from '@/core/resources/EventType'
@@ -23,6 +22,9 @@ const authStore = useAuthStore()
 const eventThemes = ref<EventTheme[]>([])
 const eventTypes = ref<EventType[]>([])
 const mailingLists = ref<MailingList[]>([])
+const locations = ref<BookableResource[]>([])
+
+const eventLocation = ref<BookableResource | null>(null)
 
 const id = Number(route.params.id)
 
@@ -37,6 +39,10 @@ onMounted(() => {
 
   mailingListService.getAll(authStore.accessToken).then((data) => {
     mailingLists.value = data
+  })
+
+  bookingService.getResources(authStore.accessToken).then((data) => {
+    locations.value = data
   })
 
   if (id) {
@@ -107,6 +113,16 @@ const edit = async () => {
       <div class="form-group">
         <TextInput v-model="event.title" placeholder="Titre" />
         <TextAreaInput v-model="event.description" placeholder="Description" />
+
+        <div class="horizontal">
+          <h4>Lieu:</h4>
+          <select v-model="eventLocation">
+            <option value="" disabled selected>Lieu de l'évènement</option>
+            <option v-for="location in locations" :key="location.id" :value="location">
+              {{ location.name }}
+            </option>
+          </select>
+        </div>
 
         <div class="horizontal">
           <div class="horizontal">

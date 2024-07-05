@@ -7,3 +7,4 @@ djangorestframework-simplejwt == 5.3.1
 drf-yasg == 1.21.7
 celery == 5.4.0
 paramiko == 3.4.0
+requests == 2.32.3

@@ -3,7 +3,7 @@ from pigeonwebapp.serializers.event_type import EventTypeSerializer
 from pigeonwebapp.serializers.event_theme import EventThemeSerializer
 from pigeonwebapp.serializers.mailing_list import MailingListSerializer
 from pigeonwebapp.serializers.user import UserSerializer
-from pigeonwebapp.services.EmailRegisterService import register_emails_for_event
+from pigeonwebapp.services.emails import register_emails_for_event
 
 from pigeonwebapp.models import Event
 

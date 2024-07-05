@@ -7,5 +7,6 @@ from .user import UserViewSet
 from .email import EmailViewSet
 from .server import ServerViewSet
 from .ssh import SSHViewSet
+from .booking import BookingViewSet
 
-__all__ = ['EventTypeViewSet', 'EventThemeViewSet', 'MailingListViewSet', 'EventViewSet', 'CustomObtainPairView', 'UserViewSet', 'EmailViewSet', 'ServerViewSet', 'SSHViewSet']
+__all__ = ['EventTypeViewSet', 'EventThemeViewSet', 'MailingListViewSet', 'EventViewSet', 'CustomObtainPairView', 'UserViewSet', 'EmailViewSet', 'ServerViewSet', 'SSHViewSet', 'BookingViewSet']

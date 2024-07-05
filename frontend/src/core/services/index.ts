@@ -6,6 +6,7 @@ import { MailingList } from '@/core/resources/MailingList'
 import { User } from '@/core/resources/User'
 import { Server } from '@/core/resources/Server'
 import { SSHService } from '@/core/services/SSHService'
+import { BookingService } from '@/core/services/BookingService'
 
 export const eventService = new APIResourceService(Event)
 export const eventTypeService = new APIResourceService(EventType)
@@ -14,3 +15,4 @@ export const mailingListService = new APIResourceService(MailingList)
 export const userService = new APIResourceService(User)
 export const serverService = new APIResourceService(Server)
 export const sshService = new SSHService()
+export const bookingService = new BookingService()

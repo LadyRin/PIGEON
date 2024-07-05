@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from pigeonwebapp.views import EventViewSet, EventTypeViewSet, EventThemeViewSet, MailingListViewSet, CustomObtainPairView, UserViewSet, EmailViewSet, ServerViewSet, SSHViewSet
+from pigeonwebapp.views import EventViewSet, EventTypeViewSet, EventThemeViewSet, MailingListViewSet, CustomObtainPairView, UserViewSet, EmailViewSet, ServerViewSet, SSHViewSet, BookingViewSet
 from django.urls import path, re_path
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from drf_yasg import openapi
@@ -26,6 +26,7 @@ router.register(r'users', UserViewSet, basename='users')
 router.register(r'emails', EmailViewSet, basename='emails')
 router.register(r'servers', ServerViewSet, basename='servers')
 router.register(r'ssh', SSHViewSet, basename='ssh')
+router.register(r'booking', BookingViewSet, basename='booking')
 
 urlpatterns = router.urls
 urlpatterns += [
