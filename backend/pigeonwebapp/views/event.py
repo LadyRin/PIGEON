@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 
 from pigeonwebapp.models.event import Event
 from pigeonwebapp.serializers.event import EventReadSerializer, EventWriteSerializer
+from pigeonwebapp.services.booking import Booker
 
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventReadSerializer
@@ -64,6 +65,10 @@ class EventViewSet(viewsets.ModelViewSet):
 
         if user != event.owner and not user.is_superuser:
             return Response(status=status.HTTP_403_FORBIDDEN)
+        
+        if event.reservation_id:
+            booker = Booker()
+            booker.unbook(event.reservation_id)
 
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

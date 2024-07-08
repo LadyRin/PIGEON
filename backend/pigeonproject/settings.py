@@ -52,9 +52,9 @@ EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
 EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL')
 
-LIBREBOOKING_URL = os.environ.get('LIBREBOOKING_URL', 'http://host.docker.internal:6080')
-LIBREBOOKING_USERNAME = os.environ.get('LIBREBOOKING_USERNAME', 'admin')
-LIBREBOOKING_PASSWORD = os.environ.get('LIBREBOOKING_PASSWORD', 'admin')
+LIBREBOOKING_URL = os.environ.get('LIBREBOOKING_URL')
+LIBREBOOKING_USERNAME = os.environ.get('LIBREBOOKING_USERNAME')
+LIBREBOOKING_PASSWORD = os.environ.get('LIBREBOOKING_PASSWORD')
 
 APPEND_SLASH = False
 

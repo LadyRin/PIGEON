@@ -17,5 +17,7 @@ class Event(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     description = models.TextField(blank=True)
-    attachment = models.FileField(upload_to='attachments/', blank=True, null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    resource_id = models.IntegerField(blank=True, null=True)
+    reservation_id = models.IntegerField(blank=True, null=True)
+    

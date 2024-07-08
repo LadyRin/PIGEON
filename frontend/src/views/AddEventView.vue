@@ -24,8 +24,6 @@ const eventTypes = ref<EventType[]>([])
 const mailingLists = ref<MailingList[]>([])
 const locations = ref<BookableResource[]>([])
 
-const eventLocation = ref<BookableResource | null>(null)
-
 const id = Number(route.params.id)
 
 onMounted(() => {
@@ -116,7 +114,7 @@ const edit = async () => {
 
         <div class="horizontal">
           <h4>Lieu:</h4>
-          <select v-model="eventLocation">
+          <select v-model="event.bookable_resource">
             <option value="" disabled selected>Lieu de l'évènement</option>
             <option v-for="location in locations" :key="location.id" :value="location">
               {{ location.name }}
