@@ -78,7 +78,7 @@ class Booker:
             response.raise_for_status()
             print(json.dumps(payload, indent=4))
             print(json.dumps(response.json(), indent=4))
-            return response.json()['referenceId']
+            return response.json()['referenceNumber']
         except requests.exceptions.HTTPError as e:
             print(e)
             print(response.text)

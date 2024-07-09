@@ -19,5 +19,5 @@ class Event(models.Model):
     description = models.TextField(blank=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     resource_id = models.IntegerField(blank=True, null=True)
-    reservation_id = models.IntegerField(blank=True, null=True)
+    reservation_id = models.CharField(max_length=100, blank=True, null=True)
     
