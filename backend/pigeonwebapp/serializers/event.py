@@ -47,7 +47,7 @@ class EventWriteSerializer(serializers.ModelSerializer):
         end_datetime = self.dt(validated_data['date'], validated_data['end_time'])
         event = super().create(validated_data)
 
-        if 'resource_id' in validated_data:
+        if 'resource_id' in validated_data and validated_data['resource_id'] is not None:
             booker = Booker()
             booker.authenticate()
             if not booker.is_available(validated_data['resource_id'], start_datetime, end_datetime):
@@ -65,7 +65,7 @@ class EventWriteSerializer(serializers.ModelSerializer):
         if instance.reservation_id:
             booker.unbook(instance.reservation_id)
 
-        if 'resource_id' in validated_data:
+        if 'resource_id' in validated_data and validated_data['resource_id'] is not None:
             start_datetime = self.dt(validated_data['date'], validated_data['start_time'])
             end_datetime = self.dt(validated_data['date'], validated_data['end_time'])
             if not booker.is_available(validated_data['resource_id'], start_datetime, end_datetime):

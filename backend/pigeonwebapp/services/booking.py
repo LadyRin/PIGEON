@@ -100,6 +100,7 @@ class Booker:
 
         headers = self.get_headers()
         query_params = {
+            "dateTime": start_date_time.astimezone(pytz.utc).isoformat(),
         }
         response = requests.get(url, headers=headers, params=query_params)
 

@@ -24,7 +24,7 @@ export class Event extends APIResource implements Creatable<Event>, Updatable<Ev
   end_time: string = ''
   description: string = ''
   owner: User | null = null
-  bookable_resource: BookableResource | null = null
+  resource_id: number | null = null
 
   getIdentifier() {
     return this.id
@@ -45,7 +45,7 @@ export class Event extends APIResource implements Creatable<Event>, Updatable<Ev
     this.end_time = json.end_time
     this.description = json.description
     this.owner = json.owner ? new User().fromJson(json.owner) : null
-    this.bookable_resource = null
+    this.resource_id = json.resource_id
     return this
   }
 
@@ -63,7 +63,7 @@ export class Event extends APIResource implements Creatable<Event>, Updatable<Ev
       start_time: this.start_time,
       end_time: this.end_time,
       description: this.description,
-      resource_id: this.bookable_resource ? this.bookable_resource.id : null
+      resource_id: this.resource_id
     }
   }
 }

@@ -139,6 +139,7 @@ AUTH_LDAP_USER_ATTR_MAP = {
 }
 
 REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'pigeonwebapp.exceptions.exception_handler.custom_exception_handler',
     'NON_FIELD_ERRORS_KEY': 'errors',
     'URL_FORMAT_OVERRIDE': 'None',
     'DEFAULT_AUTHENTICATION_CLASSES': [

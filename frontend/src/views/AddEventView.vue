@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { eventService } from '@/core/services'
 import { eventThemeService, bookingService, eventTypeService, mailingListService } from '@/core/services'
 import type { BookableResource } from '@/core/resources/BookableResource'
@@ -24,6 +24,17 @@ const eventTypes = ref<EventType[]>([])
 const mailingLists = ref<MailingList[]>([])
 const locations = ref<BookableResource[]>([])
 
+const selectedLocation = computed({
+  // getter
+  get() {
+    return locations.value.find((location) => location.id == event.value.resource_id)
+  },
+  // setter
+  set(newValue) {
+    event.value.resource_id = newValue?.id ?? null
+  }
+})
+
 const id = Number(route.params.id)
 
 onMounted(() => {
@@ -41,6 +52,7 @@ onMounted(() => {
 
   bookingService.getResources(authStore.accessToken).then((data) => {
     locations.value = data
+    locations.value.unshift({ id: undefined, name: 'Non défini' })
   })
 
   if (id) {
@@ -114,8 +126,7 @@ const edit = async () => {
 
         <div class="horizontal">
           <h4>Lieu:</h4>
-          <select v-model="event.bookable_resource">
-            <option value="" disabled selected>Lieu de l'évènement</option>
+          <select v-model="selectedLocation">
             <option v-for="location in locations" :key="location.id" :value="location">
               {{ location.name }}
             </option>

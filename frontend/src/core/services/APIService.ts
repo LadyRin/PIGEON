@@ -1,7 +1,6 @@
 import AxiosClient from '@/utils/AxiosClient'
 import { APIResource, type Creatable, type Updatable } from '@/core/resources/APIResource'
 import type { PaginationResponse } from '@/core/Common'
-import { buildException } from '@/core/exceptions'
 export class APIService {
   client: AxiosClient = new AxiosClient(import.meta.env.VITE_API_URL + '/api')
 }
@@ -70,7 +69,7 @@ export class APIResourceService<T extends APIResource> extends APIService {
       })
       .then((result) => new this.type().fromJson(result.data))
       .catch((err) => {
-        throw buildException(err)
+        throw err
       })
   }
 
@@ -83,7 +82,7 @@ export class APIResourceService<T extends APIResource> extends APIService {
       .post(this.apiRoute, item.toJsonRequest(), token)
       .then((result) => new this.type().fromJson(result.data))
       .catch((err) => {
-        throw buildException(err)
+        throw err
       })
   }
 
@@ -96,7 +95,8 @@ export class APIResourceService<T extends APIResource> extends APIService {
       .put(this.apiRoute + '/' + item.getIdentifier(), item.toJsonRequest(), token)
       .then((result) => new this.type().fromJson(result.data))
       .catch((err) => {
-        throw buildException(err)
+        console.log(err)
+        throw err
       })
   }
 
@@ -108,7 +108,7 @@ export class APIResourceService<T extends APIResource> extends APIService {
       .delete(this.apiRoute + '/' + item.getIdentifier(), null, token)
       .then(() => true)
       .catch((err) => {
-        throw buildException(err)
+        throw err
       })
   }
 
@@ -121,7 +121,7 @@ export class APIResourceService<T extends APIResource> extends APIService {
       .delete(this.apiRoute + '/destroy_list', json, token)
       .then(() => true)
       .catch((err) => {
-        throw buildException(err)
+        throw err
       })
   }
 }

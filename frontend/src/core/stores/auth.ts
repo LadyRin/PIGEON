@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import AxiosClient from '@/utils/AxiosClient'
-import { buildException } from '@/core/exceptions'
 import { flashMessage } from '@/utils/FlashMessages'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -29,7 +28,7 @@ export const useAuthStore = defineStore('auth', () => {
         flashMessage.success('Login successful')
       })
       .catch((err) => {
-        throw buildException(err)
+        throw err
       })
   }
 

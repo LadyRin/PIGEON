@@ -12,7 +12,12 @@ class BookingViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['get'])
     def resources(self, request):
-        booker = Booker()
-        booker.authenticate()
-        resources = booker.get_all_resources()
-        return Response(resources)
+        try:
+            booker = Booker()
+            booker.authenticate()
+            resources = booker.get_all_resources()
+            return Response(resources)
+        except Exception as e:
+            return Response({
+                "resources": [],
+            })

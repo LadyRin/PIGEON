@@ -1,4 +1,4 @@
 export interface BookableResource {
-  id: number
+  id: number | undefined
   name: string
 }

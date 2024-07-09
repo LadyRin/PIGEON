@@ -46,7 +46,6 @@ class EventViewSet(viewsets.ModelViewSet):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    
     def update(self, request, *args, **kwargs):
         user = request.user
         event = self.get_object()
@@ -68,6 +67,7 @@ class EventViewSet(viewsets.ModelViewSet):
         
         if event.reservation_id:
             booker = Booker()
+            booker.authenticate()
             booker.unbook(event.reservation_id)
 
         event.delete()

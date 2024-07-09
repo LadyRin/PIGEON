@@ -64,7 +64,6 @@ nav {
   height: 100px;
   min-height: 100px;
   transition: background-color 0.2s;
-  border-bottom: 1px solid var(--theme-panel);
 }
 
 .left {
