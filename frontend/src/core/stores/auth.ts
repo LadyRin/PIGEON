@@ -4,8 +4,6 @@ import AxiosClient from '@/utils/AxiosClient'
 import { flashMessage } from '@/utils/FlashMessages'
 
 export const useAuthStore = defineStore('auth', () => {
-  const accessToken = ref(localStorage.getItem('accessToken') || '')
-  const refreshToken = ref(localStorage.getItem('refreshToken') || '')
   const userId = ref(localStorage.getItem('userId') || '')
   const isAuthenticated = ref(localStorage.getItem('isAuthenticated') === 'true')
   const email = ref(localStorage.getItem('email') || '')
@@ -18,8 +16,8 @@ export const useAuthStore = defineStore('auth', () => {
       .post('/token', { username: _username, password: _password })
       .then((result) => result.data as AuthResponse)
       .then((data) => {
-        accessToken.value = data.access
-        refreshToken.value = data.refresh
+        setAccessToken(data.access)
+        setRefreshToken(data.refresh)
         userId.value = data.id.toString()
         email.value = data.email
         username.value = data.username
@@ -33,8 +31,8 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const logout = () => {
-    accessToken.value = ''
-    refreshToken.value = ''
+    setAccessToken('')
+    setRefreshToken('')
     userId.value = ''
     isAuthenticated.value = false
     email.value = ''
@@ -46,11 +44,11 @@ export const useAuthStore = defineStore('auth', () => {
 
   const refresh = () => {
     return client
-      .post('/token/refresh', { refresh: refreshToken.value })
+      .post('/token/refresh', { refresh: getRefreshToken() })
       .then((result) => result.data as AuthResponse)
       .then((data) => {
-        accessToken.value = data.access
-        refreshToken.value = data.refresh
+        setAccessToken(data.access)
+        setRefreshToken(data.refresh)
         return true
       })
       .catch(() => {
@@ -58,13 +56,21 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
-  watch(accessToken, (value) => {
-    localStorage.setItem('accessToken', value)
-  })
+  const getAccessToken = () => {
+    return localStorage.getItem('accessToken') ?? ''
+  }
 
-  watch(refreshToken, (value) => {
-    localStorage.setItem('refreshToken', value)
-  })
+  const setAccessToken = (token: string) => {
+    localStorage.setItem('accessToken', token)
+  }
+
+  const getRefreshToken = () => {
+    return localStorage.getItem('refreshToken') ?? ''
+  }
+
+  const setRefreshToken = (token: string) => {
+    localStorage.setItem('refreshToken', token)
+  }
 
   watch(userId, (value) => {
     localStorage.setItem('userId', value)
@@ -87,8 +93,7 @@ export const useAuthStore = defineStore('auth', () => {
   })
 
   return {
-    accessToken,
-    refreshToken,
+    getAccessToken,
     userId,
     isAuthenticated,
     email,

@@ -18,21 +18,21 @@ const mailingLists = ref<MailingList[]>([])
 
 const fetchResources = () => {
   eventThemeService
-    .getAll(store.accessToken)
+    .getAll(store.getAccessToken())
     .then((data) => {
       themes.value = data
     })
     .catch(handleError)
 
   eventTypeService
-    .getAll(store.accessToken)
+    .getAll(store.getAccessToken())
     .then((data) => {
       types.value = data
     })
     .catch(handleError)
 
   mailingListService
-    .getAll(store.accessToken)
+    .getAll(store.getAccessToken())
     .then((data) => {
       mailingLists.value = data
     })
@@ -51,7 +51,7 @@ const create = async (resource: APIResource, service: APIResourceService<any>, l
   }
 
   service
-    .create(res, store.accessToken)
+    .create(res, store.getAccessToken())
     .then((data: any) => {
       list.push(data)
     })
@@ -66,7 +66,7 @@ const edit = async (resource: APIResource, service: APIResourceService<any>, lis
   }
 
   service
-    .update(res, store.accessToken)
+    .update(res, store.getAccessToken())
     .then((data: any) => {
       const index = list.findIndex((r: any) => r.id === data.id)
       list[index] = data
@@ -82,7 +82,7 @@ const _delete = async (resource: APIResource, service: APIResourceService<any>, 
   }
 
   service
-    .delete(resource, store.accessToken)
+    .delete(resource, store.getAccessToken())
     .then(() => {
       const index = list.findIndex((r: any) => r.id === resource.getIdentifier())
       list.splice(index, 1)

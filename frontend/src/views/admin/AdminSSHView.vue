@@ -13,7 +13,7 @@ const servers = ref<Server[]>([])
 const sshKey = ref<string>('ssh-rsa')
 
 const fetchServers = () => {
-  serverService.getAll(store.accessToken).then((data: any) => {
+  serverService.getAll(store.getAccessToken()).then((data: any) => {
     servers.value = data
   })
 }
@@ -31,7 +31,7 @@ const create = async (server: Server) => {
   }
 
   serverService
-    .create(res, store.accessToken)
+    .create(res, store.getAccessToken())
     .then((data: any) => {
       servers.value.push(data)
     })
@@ -46,7 +46,7 @@ const edit = async (server: Server) => {
   }
 
   serverService
-    .update(res, store.accessToken)
+    .update(res, store.getAccessToken())
     .then((data: any) => {
       const index = servers.value.findIndex((s: any) => s.id === data.id)
       servers.value[index] = data
@@ -62,7 +62,7 @@ const _delete = async (resource: Server) => {
   }
 
   serverService
-    .delete(resource, store.accessToken)
+    .delete(resource, store.getAccessToken())
     .then(() => {
       const index = servers.value.findIndex((r: any) => r.id === resource.getIdentifier())
       servers.value.splice(index, 1)
@@ -78,7 +78,7 @@ const generateSSHKey = async () => {
     return
   }
 
-  sshService.generateKeyPair(store.accessToken).then((data: any) => {
+  sshService.generateKeyPair(store.getAccessToken()).then((data: any) => {
     sshKey.value = data
   })
 }
@@ -89,7 +89,7 @@ const copySSHKey = async () => {
 }
 
 const fetchPublicKey = async () => {
-  sshService.getPublicKey(store.accessToken).then((data: any) => {
+  sshService.getPublicKey(store.getAccessToken()).then((data: any) => {
     sshKey.value = data
   })
 }
@@ -100,7 +100,7 @@ const forceUpdate = async () => {
     return
   }
 
-  sshService.forceUpdate(store.accessToken).then(() => {
+  sshService.forceUpdate(store.getAccessToken()).then(() => {
     flashMessage.success('Mise à jour des serveurs lancée')
   })
 }

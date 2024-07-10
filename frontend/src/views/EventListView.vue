@@ -25,7 +25,7 @@ const pagination = ref({
 
 const fetchEvents = () => {
   eventService
-    .getAllPaginated(authStore.accessToken, pagination.value.itemsPerPage, pagination.value.page, search.value)
+    .getAllPaginated(authStore.getAccessToken(), pagination.value.itemsPerPage, pagination.value.page, search.value)
     .then((res) => {
       events.value = res.results
       pagination.value.itemsLength = res.count
@@ -46,7 +46,7 @@ const deleteEvent = async (event: Event) => {
   if (!confirmed) return
 
   eventService
-    .delete(event, authStore.accessToken)
+    .delete(event, authStore.getAccessToken())
     .then(() => {
       flashMessage.success('Événement supprimé avec succès')
       fetchEvents()

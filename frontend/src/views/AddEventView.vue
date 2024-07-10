@@ -38,26 +38,26 @@ const selectedLocation = computed({
 const id = Number(route.params.id)
 
 onMounted(() => {
-  eventThemeService.getAll(authStore.accessToken).then((data) => {
+  eventThemeService.getAll(authStore.getAccessToken()).then((data) => {
     eventThemes.value = data
   })
 
-  eventTypeService.getAll(authStore.accessToken).then((data) => {
+  eventTypeService.getAll(authStore.getAccessToken()).then((data) => {
     eventTypes.value = data
   })
 
-  mailingListService.getAll(authStore.accessToken).then((data) => {
+  mailingListService.getAll(authStore.getAccessToken()).then((data) => {
     mailingLists.value = data
   })
 
-  bookingService.getResources(authStore.accessToken).then((data) => {
+  bookingService.getResources(authStore.getAccessToken()).then((data) => {
     locations.value = data
     locations.value.unshift({ id: undefined, name: 'Non défini' })
   })
 
   if (id) {
     eventService
-      .get(id, authStore.accessToken)
+      .get(id, authStore.getAccessToken())
       .then((data) => {
         event.value = data
       })
@@ -70,7 +70,7 @@ onMounted(() => {
 
 const create = async () => {
   eventService
-    .create(event.value, authStore.accessToken)
+    .create(event.value, authStore.getAccessToken())
     .then(() => {
       flashMessage.success('Évènement créé avec succès')
       router.push({ name: 'EventList' })
@@ -80,7 +80,7 @@ const create = async () => {
 
 const edit = async () => {
   eventService
-    .update(event.value, authStore.accessToken)
+    .update(event.value, authStore.getAccessToken())
     .then(() => {
       flashMessage.success('Évènement modifié avec succès')
       router.push({ name: 'EventList' })
@@ -108,7 +108,7 @@ const edit = async () => {
         event.start_time = '09:00'
         event.end_time = '10:00'
 
-        eventService.create(event, authStore.accessToken)
+        eventService.create(event, authStore.getAccessToken())
       })
     })
 } */
