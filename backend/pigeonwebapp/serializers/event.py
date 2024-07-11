@@ -84,5 +84,5 @@ class EventFlatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('title', 'event_type', 'theme', 'speaker_first_name', 'speaker_last_name', 'speaker_from', 'speaker_comment', 'date', 'start_time', 'end_time', 'description')
+        fields = ('title', 'event_type', 'theme', 'speaker_first_name', 'speaker_last_name', 'speaker_from', 'speaker_comment', 'date', 'start_time', 'end_time', 'description', 'resource_id')
         read_only_fields = ('__all__',)

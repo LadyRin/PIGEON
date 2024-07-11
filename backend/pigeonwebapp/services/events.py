@@ -2,6 +2,7 @@ from pigeonwebapp.models import Event, EventTheme, EventType
 from pigeonwebapp.serializers.event import EventFlatSerializer
 import json
 import os
+from pigeonwebapp.services.booking import Booker
 
 
 def generate_json(file_name):
@@ -9,6 +10,21 @@ def generate_json(file_name):
     serializer = EventFlatSerializer(events, many=True)
     theme_names = EventTheme.objects.values_list('name', flat=True)
     type_names = EventType.objects.values_list('name', flat=True)
+
+    try:
+        booker = Booker()
+        booker.authenticate()
+        locations = booker.get_all_resources()['resources']
+        print(json.dumps(locations, indent=4))
+
+        for event in serializer.data:
+            for location in locations:
+                if event['resource_id'] == int(location['resourceId']):
+                    event['location'] = location['name']
+                    break
+
+    except Exception as e:
+        print('Error while fetching locations:', e)
 
     data = {
         "events": serializer.data,
