@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { Event } from '@/core/resources/Event'
 import { useAuthStore } from '@/core/stores/auth'
+import { useBookingStore } from '@/core/stores/booking'
 import { computed, ref } from 'vue'
 import { formatTime, formatDate } from '@/utils/FormatUtils'
 
 const authStore = useAuthStore()
+const bookingStore = useBookingStore()
 const userID = Number(authStore.userId)
 const props = defineProps<{
   event: Event
@@ -26,6 +28,10 @@ const timeStatus = computed(() => {
   return 'current'
 })
 
+const location = computed(() => {
+  return bookingStore.resources.find((location) => location.id == props.event.resource_id)
+})
+
 defineEmits(['delete'])
 </script>
 
@@ -35,6 +41,8 @@ defineEmits(['delete'])
       <div>
         <span class="material-symbols-outlined"> calendar_month </span>
         {{ formatDate(event.date) }}
+        <span class="material-symbols-outlined" v-if="location"> location_on </span>
+        {{ location?.name }}
         <div>
           <span class="material-symbols-outlined"> schedule </span>
           {{ formatTime(event.start_time) }} - {{ formatTime(event.end_time) }}
