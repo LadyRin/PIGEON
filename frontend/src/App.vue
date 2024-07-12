@@ -55,6 +55,9 @@ watch(theme, (value) => {
       </div>
     </RouterView>
   </div>
+  <div class="copyleft">
+    <p>🄯 Copyleft <a href="https://ladyrin.dev">Alex Letellier</a></p>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -73,6 +76,22 @@ watch(theme, (value) => {
   width: 100%;
   position: relative;
   overflow: auto;
+}
+
+.copyleft {
+  position: fixed;
+  bottom: 0;
+  left: 10px;
+  color: var(--theme-text-color);
+  font-size: 0.7rem;
+
+  a {
+    color: var(--theme-text-color);
+
+    &:visited {
+      color: var(--theme-text-color);
+    }
+  }
 }
 
 .theme-selector {
