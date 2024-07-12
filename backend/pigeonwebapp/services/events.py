@@ -15,7 +15,6 @@ def generate_json(file_name):
         booker = Booker()
         booker.authenticate()
         locations = booker.get_all_resources()['resources']
-        print(json.dumps(locations, indent=4))
 
         for event in serializer.data:
             for location in locations:
